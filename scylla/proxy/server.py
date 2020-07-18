@@ -16,12 +16,15 @@ httpclient.AsyncHTTPClient.configure("tornado.curl_httpclient.CurlAsyncHTTPClien
 
 
 def get_proxy(https=False) -> ProxyIP:
-    proxies: [ProxyIP] = ProxyIP.select().where(ProxyIP.is_valid == True).where(ProxyIP.stability >= 0.9)
+    proxies: [ProxyIP] = ProxyIP.select().where(ProxyIP.is_valid == True)
 
-    if https:
-        proxies = proxies.where(ProxyIP.is_https == True)
+    proxies = proxies.where(ProxyIP.stability >= 0.9)
+    proxies = proxies.where(ProxyIP.latency <= 300)
 
-    proxies = proxies.order_by(ProxyIP.updated_at.desc()).limit(63)
+    # if https:
+    #     proxies = proxies.where(ProxyIP.is_https == True)
+
+    proxies = proxies.order_by(ProxyIP.updated_at.desc()).limit(100)
     proxy: ProxyIP = random.choice(proxies)
 
     return proxy
