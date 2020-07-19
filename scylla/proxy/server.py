@@ -21,8 +21,8 @@ def get_proxy(https=False) -> ProxyIP:
     proxies = proxies.where(ProxyIP.stability >= 0.9)
     proxies = proxies.where(ProxyIP.latency <= 300)
 
-    # if https:
-    #     proxies = proxies.where(ProxyIP.is_https == True)
+    if https:
+        proxies = proxies.where(ProxyIP.is_https == True)
 
     proxies = proxies.order_by(ProxyIP.updated_at.desc()).limit(100)
     proxy: ProxyIP = random.choice(proxies)
