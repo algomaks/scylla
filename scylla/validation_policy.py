@@ -42,9 +42,8 @@ class ValidationPolicy(object):
         return False
 
     def should_try_https(self) -> bool:
-        if self.proxy_ip.is_valid and self.proxy_ip.attempts < 3 \
-                and self.proxy_ip.https_attempts == 0:
-            # Try https proxy for the 2nd and 3rd time if the proxy is valid
+        if self.proxy_ip.is_valid:
+            # Always try https proxy for if the proxy is valid
             return True
 
         return False
